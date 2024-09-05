@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Engine</title>
+    <script>
+        async function scoreQuery() {
+            const query = document.getElementById('query').value;
+            const response = await fetch('/score', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query })
+            });
+            const result = await response.json();
+            document.getElementById('results').innerText = JSON.stringify(result.scores, null, 2);
+        }
+
+        async function provideFeedback() {
+            const feedback = {
+                'who makes chatbots': [[2, 1.], [0, 1.], [1, 1.]]
+            };
+            const response = await fetch('/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ feedback })
+            });
+            const result = await response.json();
+            document.getElementById('feedback').innerText = result.message;
+        }
+    </script>
+</head>
+<body>
+    <h1>Search Engine</h1>
+    <label for="query">Query:</label>
+    <input type="text" id="query" name="query">
+    <button onclick="scoreQuery()">Score Query</button>
+    <pre id="results"></pre>
+    <button onclick="provideFeedback()">Provide Feedback</button>
+    <pre id="feedback"></pre>
+</body>
+</html>
